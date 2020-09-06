@@ -1,0 +1,15 @@
+language: go
+go:
+  - 1.13.x
+env:
+  - GO111MODULE=on
+jobs:
+  include:
+    - stage: test
+      name: "Unit Tests"
+      script:
+        - make setup
+        - make build
+        - make test
+stages:
+  - test
