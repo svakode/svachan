@@ -1,0 +1,19 @@
+### Go ###
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+.DS_Store
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Config File
+*.json
+
+# Go Module Sum File
+*.sum
+
+# External packages folder
+vendor/
+application.yml
+.idea/
+out/
