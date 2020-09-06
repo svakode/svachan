@@ -3,6 +3,7 @@
 <p align="center"><img src="assets/svachan.png" width="360"></p>
 
 [![Go report](http://goreportcard.com/badge/svakode/svachan)](http://goreportcard.com/report/svakode/svachan) [![Build Status](https://travis-ci.org/svakode/svachan.svg?branch=master)](https://travis-ci.org/svakode/svachan)
+
 Svachan is a [Go](https://golang.org/) Discord Bot. This bot is built on top of [DiscordGo](https://github.com/bwmarrin/discordgo) Multi purposes bot which can be extended 
 as much as you want, from handling an event in Discord to adding your own custom command!
 
