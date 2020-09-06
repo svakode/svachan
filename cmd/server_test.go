@@ -3,8 +3,8 @@ package cmd
 import (
 	"errors"
 	"github.com/bwmarrin/discordgo"
-	"github.com/svakode/svachan/dictionary"
 	"github.com/stretchr/testify/mock"
+	"github.com/svakode/svachan/dictionary"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -37,9 +37,9 @@ func (suite *ServerTestSuite) SetupTest() {
 		Used: 100,
 	}
 	suite.diskInfo = &framework.Disk{
-		Free:  1.0,
-		Total: 1.0,
-		Used:  100,
+		Free:       1.0,
+		Total:      1.0,
+		Percentage: 100,
 	}
 
 	suite.discord = new(mocks.DiscordService)
