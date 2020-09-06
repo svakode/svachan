@@ -4,10 +4,10 @@ import (
 	"errors"
 	"math"
 
-	"github.com/svakode/svachan/dictionary"
 	"github.com/mackerelio/go-osstat/cpu"
 	"github.com/mackerelio/go-osstat/memory"
 	"github.com/minio/minio/pkg/disk"
+	"github.com/svakode/svachan/dictionary"
 )
 
 type Server struct {
@@ -76,9 +76,9 @@ type DiskService interface {
 }
 
 type Disk struct {
-	Free  float64
-	Total float64
-	Used  float64
+	Free       float64
+	Total      float64
+	Percentage float64
 }
 
 func NewDisk() DiskService {
@@ -92,6 +92,6 @@ func (d *Disk) Get() (*Disk, error) {
 	}
 	d.Free = float64(diskInfo.Free) / math.Pow(1024, 3)
 	d.Total = float64(diskInfo.Total) / math.Pow(1024, 3)
-	d.Used = ((d.Total - d.Free) / d.Total) * 100
+	d.Percentage = ((d.Total - d.Free) / d.Total) * 100
 	return d, nil
 }

@@ -47,8 +47,8 @@ func ServerCommand(ctx *framework.Context) *discordgo.Message {
 			Inline: true,
 		},
 		{
-			Name:   fmt.Sprintf("Disk (%.0f%%)", diskInfo.Used),
-			Value:  fmt.Sprintf("%.2f/%.0fGB", diskInfo.Used, diskInfo.Total),
+			Name:   fmt.Sprintf("Disk (%.0f%%)", diskInfo.Percentage),
+			Value:  fmt.Sprintf("%.2f/%.0fGB", diskInfo.Total - diskInfo.Free, diskInfo.Total),
 			Inline: true,
 		},
 	}
