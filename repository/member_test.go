@@ -9,8 +9,10 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/huandu/go-sqlbuilder"
+	"github.com/lib/pq"
 	"github.com/stretchr/testify/suite"
 
+	"github.com/svakode/svachan/constant"
 	"github.com/svakode/svachan/dictionary"
 	"github.com/svakode/svachan/helper"
 )
@@ -41,7 +43,7 @@ func (suite *MemberTestSuite) TestSetMemberEmailUpdateShouldSuccess() {
 
 	suite.mockPostgre.ExpectExec(queryInsert).
 		WithArgs(argsInsert...).
-		WillReturnResult(sqlmock.NewResult(1, 0))
+		WillReturnError(&pq.Error{Code: constant.DBDuplicateError})
 	suite.mockPostgre.ExpectExec(queryUpdate).
 		WithArgs(argsUpdate...).
 		WillReturnResult(sqlmock.NewResult(1, 1))
@@ -75,7 +77,7 @@ func (suite *MemberTestSuite) TestSetMemberEmailInsertShouldReturnError() {
 
 	suite.mockPostgre.ExpectExec(queryInsert).
 		WithArgs(argsInsert...).
-		WillReturnError(errors.New("some-error"))
+		WillReturnError(&pq.Error{Code: "123"})
 
 	suite.repository = NewRepository(suite.db)
 	err := suite.repository.SetMemberEmail(suite.username, suite.email)
@@ -92,7 +94,7 @@ func (suite *MemberTestSuite) TestSetMemberEmailUpdateShouldReturnError() {
 
 	suite.mockPostgre.ExpectExec(queryInsert).
 		WithArgs(argsInsert...).
-		WillReturnResult(sqlmock.NewResult(1, 0))
+		WillReturnError(&pq.Error{Code: constant.DBDuplicateError})
 	suite.mockPostgre.ExpectExec(queryUpdate).
 		WithArgs(argsUpdate...).
 		WillReturnError(errors.New("some-error"))
@@ -217,7 +219,9 @@ func prepareSetMemberEmailInsertQuery(username, email string) (string, []driver.
 func prepareSetMemberEmailUpdateQuery(username, email string) (string, []driver.Value) {
 	ub := sqlbuilder.PostgreSQL.NewUpdateBuilder()
 	ub.Update("members")
-	ub.Set("email", email)
+	ub.Set(
+		ub.Assign("email", email),
+	)
 	ub.Where(
 		ub.Equal("username", username),
 	)

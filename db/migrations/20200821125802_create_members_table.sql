@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS members
 );
 
 ALTER TABLE members
-    ADD UNIQUE (username, email);
+    ADD UNIQUE (username);
 -- +goose StatementEnd
 
 -- +goose Down

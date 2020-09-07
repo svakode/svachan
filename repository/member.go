@@ -5,7 +5,9 @@ import (
 	"errors"
 
 	"github.com/huandu/go-sqlbuilder"
+	"github.com/lib/pq"
 
+	"github.com/svakode/svachan/constant"
 	"github.com/svakode/svachan/dictionary"
 )
 
@@ -17,24 +19,27 @@ func (r *repository) SetMemberEmail(username, email string) (err error) {
 	ib.Values(username, email)
 
 	query, args := ib.Build()
-	res, err := r.db.Exec(query, args...)
-	if err != nil {
-		return errors.New(dictionary.DBError)
-	}
-	rowsAffected, _ := res.RowsAffected()
-	if rowsAffected > 0 {
+	_, err = r.db.Exec(query, args...)
+	if err == nil {
 		return
+	}
+
+	pqErr := err.(*pq.Error)
+	if pqErr.Code != constant.DBDuplicateError {
+		return errors.New(dictionary.DBError)
 	}
 
 	ub := sqlbuilder.PostgreSQL.NewUpdateBuilder()
 	ub.Update("members")
-	ub.Set("email", email)
+	ub.Set(
+		ub.Assign("email", email),
+	)
 	ub.Where(
 		ub.Equal("username", username),
 	)
 
 	query, args = ub.Build()
-	res, err = r.db.Exec(query, args...)
+	_, err = r.db.Exec(query, args...)
 	if err != nil {
 		return errors.New(dictionary.DBError)
 	}

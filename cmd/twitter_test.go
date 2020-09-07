@@ -276,6 +276,16 @@ func (suite *MemberTestSuite) TestTwitterHelpShouldSuccess() {
 	suite.discord.AssertExpectations(suite.T())
 }
 
+func (suite *MemberTestSuite) TestTwitterUnknownCommandShouldReturnError() {
+	suite.discord.On("GetArgs").Return([]string{"unknown-command"})
+	suite.discord.On("Reply", dictionary.CommandNotFoundError).Return(&discordgo.Message{})
+
+	TwitterCommand(suite.ctx)
+
+	suite.discord.AssertCalled(suite.T(), "Reply", dictionary.CommandNotFoundError)
+	suite.discord.AssertExpectations(suite.T())
+}
+
 func TestTwitterTestSuite(t *testing.T) {
 	suite.Run(t, new(TwitterTestSuite))
 }
